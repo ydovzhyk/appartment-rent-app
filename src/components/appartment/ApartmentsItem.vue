@@ -10,10 +10,10 @@
                     <StarRating :rating="rating" />
                 </div>
                 <p class="apartments-item__price">UAH {{ price }}</p>
-                <!-- <router-link
+                <router-link
                     :to="{ name: 'apartment', params: { id }, query: { name: 'John' } }"
                     class="apartments-item__link"
-                ></router-link> -->
+                ></router-link>
             </div>
         </div>
     </div>

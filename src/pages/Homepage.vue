@@ -1,5 +1,6 @@
 <template>
   <main class="homepage">
+    <SectionWithHeaderSpacer>
     <AppContainer>
       <ApartmentsFilterForm @submit="updateData"/>
     </AppContainer>
@@ -13,11 +14,11 @@
             :rating="apartment.rating"
             :imgSrc="apartment.imgUrl"
             :price="apartment.price"
-            @click="handleItemClick"
           />
         </template>
       </ApartmentsList>
     </AppContainer>
+    </SectionWithHeaderSpacer>
   </main>
 </template>
 
@@ -27,15 +28,17 @@ import ApartmentsItem from '../components/appartment/ApartmentsItem.vue';
 import apartments from '../components/appartment/apartments';
 import ApartmentsFilterForm from '../components/appartment/ApartmentsFilterForm.vue';
 import AppContainer from '../components/shared/AppContainer.vue';
+import SectionWithHeaderSpacer from '@/components/shared/SectionWithHeaderSpacer.vue';
 
 
 export default {
-  name: 'App',
+  name: 'HomePage',
   components: {
     ApartmentsList,
     ApartmentsItem,
     ApartmentsFilterForm,
-    AppContainer
+    AppContainer,
+    SectionWithHeaderSpacer
   },
   data() {
     return {
@@ -49,9 +52,6 @@ export default {
     }
   },
   methods: {
-    handleItemClick() {
-      console.log('item clicked')
-    },
     updateData({ city, price }) {
       if (city !== undefined && price !== undefined) {
         this.apartments = apartments;

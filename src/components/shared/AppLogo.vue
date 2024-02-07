@@ -1,5 +1,7 @@
 <template>
-    <img src="../../assets/svg/logo.svg" alt="logo">
+    <router-link :to="{ name: 'homepage' }">
+        <img src="../../assets/svg/logo.svg" alt="logo">
+    </router-link>
 </template>
 
 <script>
