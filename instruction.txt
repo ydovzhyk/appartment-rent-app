@@ -1,0 +1,45 @@
+1. Встановлення пакета 
+npm install -g @vue/cli
+2. Перевірити встановлену версію
+vue --version
+3. Оновлення версії
+npm update -g @vue/cli
+4. Запуск проекта
+npm run serve
+5. Використання scss 
+npm install --save-dev sass-loader node-sass
+Налаштовуємо наші стилі в assets:
+/* src/assets/scss */
+використовуємо для стилізації:
+background-color: $background-btn-main-color;
+_________
+Для створення Vue components встановлюємо Vue VSCode Snippets
+за допомогою команди vbase створюємо темплейт компонента
+_________
+В файл index.html підключаємо шрифт
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+далі в App.vue:
+#app {
+  font-family: Montserrat, Helvetica, Arial, sans-serif;
+}
+_________
+<a href="https://facebook.com" @click.prevent.stop="handleLinkClick">facebook</a>
+prevent - забороняє перехід на сторінку
+stop - зупиняє події які назначені були вище
+methods: {
+  handleLinkClick() {
+    console.log("link clicked")
+  }
+}
+_________
+v-model
+<h2>{{ text }}</h2>
+<input type="text" :value="text" @input="event => text = event.target.value">
+<input type="text" v-model="text">
+_________
+Підключаємо Routes
+npm i vue-router
+В main.js робимо імпорт
+import VueRouter from "vue-router";
+Та реєструємо VueRouter у додатку:
+Vue.use(VueRouter);
