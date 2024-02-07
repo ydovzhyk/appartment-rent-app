@@ -1,23 +1,23 @@
 <template>
   <main class="homepage">
-      <AppContainer>
-          <ApartmentsFilterForm @submit="updateData"/>
-        </AppContainer>
-        <AppContainer>
-          <p v-if="!apartments.length">За вашим пошуком не знайдено квартир</p>
-          <ApartmentsList v-else :items="apartments">
-            <template v-slot:apartment="{ apartment }">
-              <ApartmentsItem
-                :id="apartment.id"
-                :descr="apartment.descr"
-                :rating="apartment.rating"
-                :imgSrc="apartment.imgUrl"
-                :price="apartment.price"
-                @click="handleItemClick"
-              />
-            </template>
-          </ApartmentsList>
-        </AppContainer>
+    <AppContainer>
+      <ApartmentsFilterForm @submit="updateData"/>
+    </AppContainer>
+    <AppContainer>
+      <p v-if="!apartments.length">За вашим пошуком не знайдено квартир</p>
+      <ApartmentsList v-else :items="apartments">
+        <template v-slot:apartment="{ apartment }">
+          <ApartmentsItem
+            :id="apartment.id"
+            :descr="apartment.descr"
+            :rating="apartment.rating"
+            :imgSrc="apartment.imgUrl"
+            :price="apartment.price"
+            @click="handleItemClick"
+          />
+        </template>
+      </ApartmentsList>
+    </AppContainer>
   </main>
 </template>
 

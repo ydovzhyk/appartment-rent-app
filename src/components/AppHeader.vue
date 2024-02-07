@@ -30,6 +30,4 @@ import AppLogo from './shared/AppLogo.vue';
     background: $secondary-color;
     padding: 16px 0;
 }
-
-
 </style>
