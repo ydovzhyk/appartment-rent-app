@@ -13,9 +13,9 @@ import AppLogo from './shared/AppLogo.vue';
     export default {
         name: 'AppHeader',
         components: {
-            AppContainer,
-            AppLogo
-        }
+    AppContainer,
+    AppLogo,
+}
     }
 </script>
 

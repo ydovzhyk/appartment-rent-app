@@ -3,8 +3,9 @@
         <CustomSelect :items="cities" v-model="city" class="custom-select"/>
         <CustomInput
             v-model="price"
+            type="number"
             placeholder="Ціна, від"
-            error-message="Надайте значення полю"
+            errorMessage="*Введіть коректне значення"
             :rules="rules"
         />
         <ButtonVue class="btn-dark" type="submit" label="Підібрати житло"></ButtonVue>

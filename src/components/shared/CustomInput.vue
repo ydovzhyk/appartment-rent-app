@@ -2,20 +2,77 @@
     <div class="wrapper-input">
         <input 
             :value="modelValue" 
-            @input="updateValue" 
+            @input="updateValue"
+            v-bind="$attrs" 
             class="custom-input"
             :placeholder="placeholder" 
+            :class="!isValid && 'custom-input--error'"
         />
+        <span v-if="!isValid" class="custom-input__error">{{ error }}</span>
     </div>
 </template>
 
 <script>
 export default {
     name: 'CustomInput',
-    props: ['modelValue', 'placeholder'],
+    data() {
+        return {
+            isValid: true,
+            error: '',
+            isFirstInput: true,
+        };
+    },
+    props: {
+        modelValue: String,
+        placeholder: {
+            type: String,
+            default: '',
+        },
+        errorMessage: {
+            type: String,
+            default: '',
+        },
+        rules: {
+            type: Array,
+            default: () => [],
+        },
+    },
+    inject: {
+        form: {
+            default: null,
+        },
+    },
+    inheritAttrs: false,
+    watch: {
+        modelValue(value) {
+            this.validate(value)
+        }
+    },
+    // watch: {
+    //     modelValue() {
+    //         this.validate()
+    //     }
+    // },
+    mounted() {
+        if (!this.form) return;
+        this.form.registerInput(this);
+    },
+    beforeUnmount() {
+        if (!this.form) return;
+        this.form.unRegisterInput(this);
+    },
     methods: {
         updateValue(event) {
             this.$emit('update:modelValue', event.target.value);
+        },
+        validate(value) {
+            this.isValid = this.rules.every((rule) => {
+                const { hasPassed, message } = rule(value)
+                if (!hasPassed) {
+                    this.error = message || this.errorMessage;
+                }
+                return hasPassed;
+            });
         },
     },
 };
@@ -27,7 +84,6 @@ export default {
     position: relative;
     display: inline-flex;
 }
-
 .custom-input {
     max-width: 220px;
     width: 100%;
@@ -42,7 +98,7 @@ export default {
     }
 
     &--error {
-        border-color: red;
+        background-color: $main-color;
     }
 
     &__error {
@@ -54,5 +110,9 @@ export default {
         color: red;
         line-height: 1.3;
     }
+}
+
+.custom-input--error::placeholder {
+    color: white;
 }
 </style>

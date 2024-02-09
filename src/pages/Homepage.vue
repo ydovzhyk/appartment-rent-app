@@ -25,11 +25,10 @@
 <script>
 import ApartmentsList from '../components/appartment/ApartmentsList.vue';
 import ApartmentsItem from '../components/appartment/ApartmentsItem.vue';
-import apartments from '../components/appartment/apartments';
 import ApartmentsFilterForm from '../components/appartment/ApartmentsFilterForm.vue';
 import AppContainer from '../components/shared/AppContainer.vue';
 import SectionWithHeaderSpacer from '@/components/shared/SectionWithHeaderSpacer.vue';
-
+import { getApartmentsList } from '../services/apartments.service';
 
 export default {
   name: 'HomePage',
@@ -44,24 +43,37 @@ export default {
     return {
       text: '',
       selectedItem: '',
-      apartments,
+      apartments: [],
       filters: {
         city: '',
         price: ''
       }
     }
   },
+  async created() {
+    try {
+      const { data } = await getApartmentsList();
+      this.apartments = data;
+    } catch (error) {
+      console.error(error);
+    }
+  },
   methods: {
-    updateData({ city, price }) {
+    async updateData({ city, price }) {
       if (city !== undefined && price !== undefined) {
-        this.apartments = apartments;
-        this.filters.city = city;
-        this.filters.price = price;
+        try {
+          const { data } = await getApartmentsList();
+          this.apartments = data;
+          this.filters.city = city;
+          this.filters.price = price;
 
-        // Оновлюємо apartments з відфільтрованими apartment
-        this.apartments = this.apartments.filter(apartment => {
-          return (this.filters.city === 'Всі міста' || apartment.location.city === this.filters.city) && apartment.price >= this.filters.price;
-        });
+          // Оновлюємо apartments з відфільтрованими apartment
+          this.apartments = this.apartments.filter(apartment => {
+            return (this.filters.city === 'Всі міста' || apartment.location.city === this.filters.city) && apartment.price >= this.filters.price;
+          });
+        } catch (error) {
+          console.error(error);
+        }
       } else {
         return
       }

@@ -40,6 +40,48 @@ _________
 Підключаємо Routes
 npm i vue-router
 В main.js робимо імпорт
-import VueRouter from "vue-router";
-Та реєструємо VueRouter у додатку:
-Vue.use(VueRouter);
+import router from "./router";
+createApp(App).use(router).mount("#app");
+
+router.js створюємо router:
+import { createRouter, createWebHistory } from "vue-router";
+
+const HomePage = () => import("./pages/HomePage");
+const routes = [
+  {
+    path: "/",
+    component: HomePage,
+    name: "homepage",
+  },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+_________
+Для передачі параметрів url використовуємо:
+{
+    path: "/apartments/:id",
+    component: ApartmentPage,
+    name: "apartment",
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  Для отримання парметрів з url:
+  mounted() {
+    console.log(this.$route.params.id)
+    console.log(this.$route.query.name)
+  }
+  _________
+  Робота з асинхроними запросами
+  npm i axios
+- робимо папку utils -> axios.js
+- також папку services де ми описуємо самі запроси:
+
+import axios from '../utils/axios';
+
+export const getApartmentsList = () => {
+  return axios.get('/apartments');
+};
