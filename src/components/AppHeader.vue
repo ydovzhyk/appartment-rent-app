@@ -1,7 +1,9 @@
 <template>
     <header class="header">
         <AppContainer>
-            <AppLogo />
+            <div class="header__content">
+                <AppLogo />
+            </div>
         </AppContainer>
     </header>
 </template>
@@ -29,5 +31,12 @@ import AppLogo from './shared/AppLogo.vue';
     width: 100%;
     background: $secondary-color;
     padding: 16px 0;
+    z-index: 100;
+
+    &__content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 }
 </style>

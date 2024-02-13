@@ -1,10 +1,12 @@
 <template>
   <div id="app">
-    <AppHeader />
     <div class="content">
-      <router-view></router-view>
+      <AppHeader />
+        <div class="router">
+          <router-view></router-view>
+        </div>
+      <AppFooter />
     </div>
-    <AppFooter />
   </div>
 </template>
 
@@ -25,14 +27,21 @@ export default {
 #app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   font-family: Montserrat, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .content {
+  position: absolute;
+  top: 0;
+  left: 0px;
+  width: 100%;
   flex-grow: 1;
-  margin-bottom: 40px;
 }
+
+.router {
+  min-height: calc(100vh - 30px);
+}
+
 </style>

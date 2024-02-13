@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const HomePage = () => import("./pages/HomePage");
 const ApartmentPage = () => import("./pages/ApartmentPage.vue");
+const LoginPage = () => import("./pages/Login.Page.vue");
+const RegistrationPage = () => import("./pages/RegistrationPage.vue");
 const NotFoundPage = () => import("./pages/NotFoundPage.vue");
 
 const routes = [
@@ -16,6 +18,22 @@ const routes = [
     name: "apartment",
     meta: {
       requiresAuth: true,
+    },
+  },
+  {
+    path: "/login",
+    component: LoginPage,
+    name: "login-page",
+    meta: {
+      hideForAuth: true,
+    },
+  },
+  {
+    path: "/registration",
+    component: RegistrationPage,
+    name: "registration-page",
+    meta: {
+      hideForAuth: true,
     },
   },
   {

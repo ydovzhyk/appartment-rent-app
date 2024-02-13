@@ -31,6 +31,7 @@ import AppContainer from '../shared/AppContainer.vue'
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
     gap: 30px;
+    margin-bottom: 30px;
 }
 
 </style>

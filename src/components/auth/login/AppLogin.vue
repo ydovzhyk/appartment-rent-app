@@ -1,7 +1,7 @@
 <template>
   <AuthContainer class="login">
     <MainTitle class="login__title">Login</MainTitle>
-    <AppForm ref="form" class="login__form" @submit.prevent="handleSubmit">
+    <form class="login__form" @submit.prevent="handleSubmit">
       <CustomInput
         v-model="formData.email"
         placeholder="Email"
@@ -19,13 +19,13 @@
         :rules="passwordRules"
         class="login__input"
       />
-      <ButtonVue class="login__btn" type="submit" :loading="loading">Вхід</ButtonVue>
-    </AppForm>
+      <ButtonVue class="btn-dark" type="submit" label="Вхід" :loading="loading"></ButtonVue>
+    </form>
+    <CircleLoader v-if="loading" width="90" height="90" color="#ff662d" />
   </AuthContainer>
 </template>
 
 <script>
-import AppForm from '../../shared/AppForm.vue';
 import CustomInput from '../../shared/CustomInput.vue';
 import ButtonVue from '../../shared/ButtonVue.vue';
 import AuthContainer from '../AuthContainer.vue';
@@ -35,16 +35,17 @@ import {
   passwordValidation,
   isRequired,
 } from '../../../utils/validationRules';
-import { mapActions } from 'vuex';
+import { loginUser } from '@/services/auth.service';
+import CircleLoader from '../../shared/loaders/CircleLoader.vue';
 
 export default {
-  name: 'LoginPage',
+  name: 'AppLogin',
   components: {
-    AppForm,
     CustomInput,
     ButtonVue,
     AuthContainer,
     MainTitle,
+    CircleLoader,
   },
   data() {
     return {
@@ -71,28 +72,33 @@ export default {
     },
   },
   methods: {
-    ...mapActions('auth', ['login']),
     async handleSubmit() {
-      const { form } = this.$refs;
-      const isFormValid = form.validate();
+      this.loading = true;
+      const isFormValid = Object.values(this.$refs)
+        .every(ref => ref.isValid);
 
       if (isFormValid) {
         try {
-          this.loading = true;
-          await this.login(this.formData);
-
-          this.$router.push({ name: 'homepage' });
-          form.reset();
+          const { data } = await loginUser(this.formData);
+            console.log(data);
+            this.resetForm();
+            this.loading = false;
         } catch (error) {
-          this.$notify({
-            type: 'error',
-            title: 'Сталася помилка',
-            text: error.message,
-          });
-        } finally {
           this.loading = false;
-        }
+          console.log(error)
+        } 
+
+      } else {
+        return;
       }
+    },
+    resetForm() {
+      this.formData = {
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+      };
     },
   },
 };
@@ -101,8 +107,11 @@ export default {
 <style lang="scss" scoped>
 .login {
   &__form {
-    display: block;
-    flex-direction: column;
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr; 
+    grid-gap: 30px; 
+    justify-items: center;
   }
 
   &__title {

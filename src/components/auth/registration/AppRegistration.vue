@@ -1,8 +1,9 @@
 <template>
   <AuthContainer class="registration">
-    <MainTitle class="registration__title">Регистрация</MainTitle>
-    <Form ref="form" class="registration__form" @submit.prevent="handleSubmit">
+    <MainTitle class="registration__title">Registration</MainTitle>
+    <form class="registration__form" @submit.prevent="handleSubmit">
       <CustomInput
+        ref="nameInput"
         v-model="formData.name"
         placeholder="Name"
         autocomplete="username"
@@ -11,6 +12,7 @@
         class="registration__input"
       />
       <CustomInput
+        ref="nameInput"
         v-model="formData.email"
         placeholder="Email"
         autocomplete="email"
@@ -19,6 +21,7 @@
         class="registration__input"
       />
       <CustomInput
+        ref="nameInput"
         v-model="formData.password"
         placeholder="Password"
         autocomplete="current-password"
@@ -28,6 +31,7 @@
         class="registration__input"
       />
       <CustomInput
+        ref="nameInput"
         v-model="formData.confirmPassword"
         placeholder="Confirm password"
         autocomplete="current-password"
@@ -36,34 +40,33 @@
         :rules="confirmPassword"
         class="registration__input"
       />
-      <Button class="registration__btn" type="submit" :loading="loading"
-        >Вход</Button
-      >
-    </Form>
+      <ButtonVue class="btn-dark" type="submit" label="Зареєструватися" :loading="loading"></ButtonVue>
+    </form>
+    <CircleLoader v-if="loading" width="90" height="90" color="#ff662d" />
   </AuthContainer>
 </template>
 
 <script>
-import Form from '../../shared/form';
-import CustomInput from '../../shared/CustomInput';
-import Button from '../../shared/Button';
-import AuthContainer from '../AuthContainer';
-import MainTitle from '../../shared/MainTitle';
+import CustomInput from '../../shared/CustomInput.vue';
+import ButtonVue from '../../shared/ButtonVue.vue';
+import AuthContainer from '../AuthContainer.vue';
+import MainTitle from '../../shared/MainTitle.vue';
 import {
   emailValidation,
   passwordValidation,
   isRequired,
 } from '../../../utils/validationRules';
-import { mapActions } from 'vuex';
+import { registerUser } from '@/services/auth.service';
+import CircleLoader from '../../shared/loaders/CircleLoader.vue';
 
 export default {
-  name: 'Registration',
+  name: 'AppRegistration',
   components: {
-    Form,
     CustomInput,
-    Button,
+    ButtonVue,
     AuthContainer,
     MainTitle,
+    CircleLoader,
   },
   data() {
     return {
@@ -97,40 +100,39 @@ export default {
       return [
         (val) => ({
           hasPassed: val === this.formData.password,
-          message: 'Пароли не совпадают',
+          message: 'Паролі не співпадають',
         }),
       ];
     },
   },
   methods: {
-    ...mapActions('auth', ['registerUser']),
     async handleSubmit() {
-      const { form } = this.$refs;
-      const isFormValid = form.validate();
-      const { name, password, email } = this.formData;
+      this.loading = true;
+      const isFormValid = Object.values(this.$refs)
+        .every(ref => ref.isValid);
 
+      const { name, email, password } = this.formData;
       if (isFormValid) {
         try {
-          this.loading = true;
-
-          await this.registerUser({
-            name,
-            password,
-            email,
-          });
-
-          this.$router.push({ name: 'homepage' });
-          form.reset();
+          const { data } = await registerUser({name, email, password});
+          console.log(data);
+          this.resetForm();
+          this.loading = false;
         } catch (error) {
-          this.$notify({
-            type: 'error',
-            title: 'Произошла ошибка',
-            text: error.message,
-          });
-        } finally {
+          console.log(error)
           this.loading = false;
         }
+      } else {
+        return;
       }
+    },
+    resetForm() {
+      this.formData = {
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+      };
     },
   },
 };
@@ -139,8 +141,11 @@ export default {
 <style lang="scss" scoped>
 .registration {
   &__form {
-    display: block;
-    flex-direction: column;
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr; 
+    grid-gap: 30px; 
+    justify-items: center;
   }
 
   &__title {

@@ -13,6 +13,7 @@
                     </div>
                 </div>
             </AppContainer>
+            <CircleLoader v-if="loading" width="90" height="90" color="#ff662d" />
         </SectionWithHeaderSpacer>
     </main>
 </template>
@@ -25,6 +26,7 @@ import AprtmentsOwner from '../components/appartment/AprtmentsOwner.vue';
 import ReviewsVisitor from '../components/reviews/ReviewsVisitor.vue';
 import reviewsList from '../components/reviews/reviews.json';
 import { getApartmentById } from '../services/apartments.service';
+import CircleLoader from '../components/shared/loaders/CircleLoader.vue';
 
 export default {
     name: 'ApartmentPage',
@@ -33,11 +35,13 @@ export default {
         SectionWithHeaderSpacer,
         ApartmentsMainInfo,
         AprtmentsOwner,
-        ReviewsVisitor
+        ReviewsVisitor,
+        CircleLoader,
     },
     data() {
         return {
             apartment: null,
+            loading: false,
         };
     },
     computed: {
@@ -47,11 +51,14 @@ export default {
     },
     async created() {
         try {
+            this.loading = true;
             const { id } = this.$route.params;
             const { data } = await getApartmentById(id);
             this.apartment = data;
+            this.loading = false;
         } catch (error) {
             console.error(error);
+            this.loading = false;
         }
     },
 };

@@ -61,7 +61,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: calc(100vh - 30px);
   &__title {
     font-size: 20px;
     text-align: center;
