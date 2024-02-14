@@ -56,7 +56,7 @@ import {
   passwordValidation,
   isRequired,
 } from '../../../utils/validationRules';
-import { registerUser } from '@/services/auth.service';
+// import { registerUser } from '@/services/auth.service';
 import CircleLoader from '../../shared/loaders/CircleLoader.vue';
 
 export default {
@@ -111,16 +111,20 @@ export default {
       const isFormValid = Object.values(this.$refs)
         .every(ref => ref.isValid);
 
-      const { name, email, password } = this.formData;
       if (isFormValid) {
+        const { name, email, password } = this.formData;
         try {
-          const { data } = await registerUser({name, email, password});
-          console.log(data);
+          await this.$store.dispatch('auth/registerUser', { name, email, password });
           this.resetForm();
           this.loading = false;
+          this.$router.push({ name: 'homepage' });
         } catch (error) {
-          console.log(error)
           this.loading = false;
+          this.$notify({
+            type: 'error',
+            title: "We received an error",
+            text: error.message,
+          });
         }
       } else {
         return;

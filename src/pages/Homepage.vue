@@ -59,10 +59,14 @@ export default {
       this.loading = true;
       const { data } = await getApartmentsList();
       this.apartments = data;
-      this.loading = false
+      this.loading = false;
     } catch (error) {
-      console.error(error);
-      this.loading = false
+      this.loading = false;
+      this.$notify({
+        type: 'error',
+        title: "We received an error",
+        text: error.message,
+      });
     }
   },
   methods: {
@@ -81,8 +85,12 @@ export default {
           });
           this.loading = false;
         } catch (error) {
-          console.error(error);
           this.loading = false;
+          this.$notify({
+            type: 'error',
+            title: "We received an error",
+            text: error.message,
+          });
         }
       } else {
         return

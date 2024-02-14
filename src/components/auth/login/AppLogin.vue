@@ -35,7 +35,7 @@ import {
   passwordValidation,
   isRequired,
 } from '../../../utils/validationRules';
-import { loginUser } from '@/services/auth.service';
+// import { loginUser } from '@/services/auth.service';
 import CircleLoader from '../../shared/loaders/CircleLoader.vue';
 
 export default {
@@ -79,13 +79,17 @@ export default {
 
       if (isFormValid) {
         try {
-          const { data } = await loginUser(this.formData);
-            console.log(data);
-            this.resetForm();
-            this.loading = false;
+          await this.$store.dispatch('auth/login', this.formData);
+          this.resetForm();
+          this.loading = false;
+          this.$router.push({ name: 'homepage' });
         } catch (error) {
           this.loading = false;
-          console.log(error)
+          this.$notify({
+            type: 'error',
+            title: "We received an error",
+            text: error.message,
+          });
         } 
 
       } else {

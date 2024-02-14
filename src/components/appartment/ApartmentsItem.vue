@@ -13,6 +13,7 @@
                 <router-link
                     :to="{ name: 'apartment', params: { id }, query: { name: 'John' } }"
                     class="apartments-item__link"
+                    @click="clearData"
                 ></router-link>
             </div>
         </div>
@@ -49,7 +50,12 @@ import StarRating from '../shared/StarRating.vue'
                 type: String,
                 default: '',
             },
+    },
+        methods: {
+        clearData() {
+            this.$store.commit('apartment/clearApartmentByIdData');
         },
+    },
     }
 </script>
 

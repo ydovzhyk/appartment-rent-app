@@ -25,8 +25,9 @@ import ApartmentsMainInfo from '../components/appartment/ApartmentsMainInfo.vue'
 import AprtmentsOwner from '../components/appartment/AprtmentsOwner.vue';
 import ReviewsVisitor from '../components/reviews/ReviewsVisitor.vue';
 import reviewsList from '../components/reviews/reviews.json';
-import { getApartmentById } from '../services/apartments.service';
 import CircleLoader from '../components/shared/loaders/CircleLoader.vue';
+// import { getApartmentById } from '../services/apartments.service';
+// Закоментована частина якщо роблю без store
 
 export default {
     name: 'ApartmentPage',
@@ -40,7 +41,7 @@ export default {
     },
     data() {
         return {
-            apartment: null,
+            // apartment: null,
             loading: false,
         };
     },
@@ -48,17 +49,25 @@ export default {
         reviewsList() {
             return reviewsList;
         },
+        apartment() {
+            return this.$store.state.apartment.apartmentById;
+        },
     },
     async created() {
         try {
             this.loading = true;
             const { id } = this.$route.params;
-            const { data } = await getApartmentById(id);
-            this.apartment = data;
+            // const { data } = await getApartmentById(id);
+            // this.apartment = data;
+            await this.$store.dispatch('apartment/getApartmentByIdData', id);
             this.loading = false;
         } catch (error) {
-            console.error(error);
             this.loading = false;
+            this.$notify({
+                type: 'error',
+                title: "We received an error",
+                text: error.message,
+            });
         }
     },
 };

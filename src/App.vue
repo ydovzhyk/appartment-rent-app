@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <AppNotification />
     <div class="content">
       <AppHeader />
         <div class="router">
@@ -12,14 +13,16 @@
 
 <script>
 import AppFooter from './components/AppFooter.vue';
-import AppHeader from './components/AppHeader.vue'
+import AppHeader from './components/AppHeader.vue';
+import AppNotification from './components/shared/AppNotification.vue';
 
 export default {
   name: 'App',
   components: {
     AppFooter,
-    AppHeader
-  }
+    AppHeader,
+    AppNotification
+  },
 }
 </script>
 

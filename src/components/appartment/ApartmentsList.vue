@@ -33,5 +33,4 @@ import AppContainer from '../shared/AppContainer.vue'
     gap: 30px;
     margin-bottom: 30px;
 }
-
 </style>
